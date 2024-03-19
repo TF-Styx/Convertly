@@ -13,7 +13,6 @@
     <Folder Include="ViewModels\Commands\" />
     <Folder Include="ViewModels\Serviсes\" />
     <Folder Include="Views\Pages\" />
-    <Folder Include="Views\Styles\" />
   </ItemGroup>
 
 </Project>
