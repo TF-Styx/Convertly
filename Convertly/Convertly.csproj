@@ -10,9 +10,10 @@
 
   <ItemGroup>
     <Folder Include="Model\" />
-    <Folder Include="ViewModels\Commands\" />
-    <Folder Include="ViewModels\Serviсes\" />
-    <Folder Include="Views\Pages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FontAwesome5" Version="2.1.11" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,8 @@
-﻿using Convertly.ViewModels;
-using Convertly.ViewModels.Serviсes.NavigationPage;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,18 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Convertly
+namespace Convertly.Views.Pages
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Логика взаимодействия для GIFPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class GIFPage : Page
     {
-        public MainWindow()
+        public GIFPage()
         {
             InitializeComponent();
-
-            DataContext = new MainWindowViewModel(new NavigationServices(MainFrame));
         }
     }
 }

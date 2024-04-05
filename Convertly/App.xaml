@@ -3,7 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Convertly"
              StartupUri="/Views/Windows/MainWindow.xaml">
+
     <Application.Resources>
-         
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+
+                <ResourceDictionary Source="/Views/Styles/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Views/Styles/ImageStyle.xaml"/>
+                <ResourceDictionary Source="/Views/Styles/LableStyle.xaml"/>
+                <ResourceDictionary Source="/Views/Styles/ListViewStyle.xaml"/>
+                <ResourceDictionary Source="/Views/Styles/TextBoxStyle.xaml"/>
+                <ResourceDictionary Source="/Views/Styles/TabControlStyle.xaml"/>
+                
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
     </Application.Resources>
+    
 </Application>

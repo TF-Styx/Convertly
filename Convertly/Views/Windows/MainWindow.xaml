@@ -4,9 +4,134 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Convertly"
+        xmlns:fa="http://schemas.fontawesome.com/icons/"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" 
+        Height="700" Width="1300"
+        MinHeight="365" MinWidth="650"
+        WindowStartupLocation="CenterScreen">
+    
     <Grid>
         
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Column="0" Style="{StaticResource TabControleMainStyle}">
+            
+            <TabItem Header="Конвертер" FontSize="15">
+                
+                <Grid>
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Изображений" Grid.Row="0" Grid.Column="0" Style="{StaticResource Lable}"/>
+                    <Button Grid.Column="0" Grid.Row="1"
+                            HorizontalAlignment="Center" 
+                            Command="{Binding NavigateToImageConvertPageCommand}"
+                            Template="{StaticResource MenuButtonTemplate}"
+                            ToolTip="Конвертор изображений">
+                        
+                        <fa:ImageAwesome Icon="Regular_FileImage" Foreground="Black" Height="40"/>
+                        
+                    </Button>
+
+                    <Label Content="Документов" Grid.Row="0" Grid.Column="1" Style="{StaticResource Lable}"/>
+                    <Button Grid.Column="1" Grid.Row="1" 
+                            HorizontalAlignment="Center"  
+                            Command="{Binding NavigateToImageConvertPageCommand}" 
+                            Template="{StaticResource MenuButtonTemplate}" 
+                            ToolTip="Конвертор документов">
+
+                        <fa:ImageAwesome Icon="Regular_FileWord" Foreground="Black" Height="40"/>
+
+                    </Button>
+
+                    <Label Content="Видео" Grid.Row="0" Grid.Column="2" Style="{StaticResource Lable}"/>
+                    <Button Grid.Column="2" Grid.Row="1" 
+                            HorizontalAlignment="Center"
+                            Command="{Binding NavigateToImageConvertPageCommand}" 
+                            Template="{StaticResource MenuButtonTemplate}" 
+                            ToolTip="Конвертор видео">
+
+                        <fa:ImageAwesome Icon="Regular_FileVideo" Foreground="Black" Height="40"/>
+
+                    </Button>
+
+                    <Label Content="Аудио" Grid.Row="0" Grid.Column="3" Style="{StaticResource Lable}"/>
+                    <Button Grid.Column="3" Grid.Row="1" 
+                            HorizontalAlignment="Center" 
+                            Command="{Binding NavigateToImageConvertPageCommand}" 
+                            Template="{StaticResource MenuButtonTemplate}" 
+                            ToolTip="Конвертор аудио">
+
+                        <fa:ImageAwesome Icon="Regular_FileAudio" Foreground="Black" Height="40"/>
+
+                    </Button>
+
+                </Grid>
+                
+            </TabItem>
+
+            <TabItem Header="Создание GIF">
+                
+            </TabItem>
+            
+        </TabControl>
+        
+        
+        <!--<ScrollViewer Grid.Column="0">
+            
+            <StackPanel>
+
+                <TreeView BorderThickness="0">
+                    <TreeView.Resources>
+                        <Style TargetType="TreeViewItem">
+                            <Setter Property="Focusable" Value="False" />
+                        </Style>
+                    </TreeView.Resources>
+                    
+                    <TreeViewItem Header="Конвертор" IsExpanded="True" FontSize="20">
+                        <Button Content="Изображение" Command="{Binding NavigateToImageConvertPageCommand}" Template="{StaticResource MenuButtonTemplate}"/>
+                        <Button Content="Видео" Command="{Binding NavigateToGIFPageCommand}" Template="{StaticResource MenuButtonTemplate}"/>
+                        <Button Content="Документы" Template="{StaticResource MenuButtonTemplate}"/>
+                        <Button Content="Аудио" Template="{StaticResource MenuButtonTemplate}"/>
+                    </TreeViewItem>
+
+                    <TreeViewItem Header="Сжатие" FontSize="20">
+                        <Button Content="Изображение" Template="{StaticResource MenuButtonTemplate}"/>
+                        <Button Content="Видео" Template="{StaticResource MenuButtonTemplate}"/>
+                        <Button Content="Документы" Template="{StaticResource MenuButtonTemplate}"/>
+                        <Button Content="Аудио" Template="{StaticResource MenuButtonTemplate}"/>
+                    </TreeViewItem>
+
+                    <TreeViewItem Header="GIF" FontSize="20">
+                        <Button Content="Изображение" Template="{StaticResource MenuButtonTemplate}"/>
+                        <Button Content="Видео" Template="{StaticResource MenuButtonTemplate}"/>
+                        <Button Content="Документы" Template="{StaticResource MenuButtonTemplate}"/>
+                        <Button Content="Аудио" Template="{StaticResource MenuButtonTemplate}"/>
+                    </TreeViewItem>
+
+                </TreeView>
+
+            </StackPanel>
+            
+        </ScrollViewer>-->
+
+
+        <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden"/>
+        
     </Grid>
+    
 </Window>
