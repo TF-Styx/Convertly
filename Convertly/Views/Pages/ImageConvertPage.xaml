@@ -4,11 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Convertly.Views.Pages"
+      xmlns:fa="http://schemas.fontawesome.com/icons/"
       mc:Ignorable="d" 
       d:DesignHeight="700" d:DesignWidth="1300"
-      Title="ImageConvertPage" Background="White">
+      Title="ImageConvertPage" Background="White"
+      FontFamily="Bahnschrift SemiBold SemiCondensed">
 
-    <Grid>
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="1"/>
             <RowDefinition Height="25"/>
@@ -22,7 +24,7 @@
             <ColumnDefinition Width="350"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="350" MinWidth="100"/>
+            <ColumnDefinition Width="250" MinWidth="100"/>
             <ColumnDefinition Width="1"/>
         </Grid.ColumnDefinitions>
 
@@ -36,7 +38,10 @@
 
                     <Label Content="Перетащите файл" Margin="15" Style="{StaticResource Lable}"/>
 
-                    <Button Content="ВЫберите файл" Margin="15" HorizontalAlignment="Center" VerticalAlignment="Center" Template="{StaticResource MenuButtonTemplate}"/>
+                    <Button Content="ВЫберите файл" Margin="15" 
+                            HorizontalAlignment="Center" VerticalAlignment="Center" 
+                            Template="{StaticResource MenuButtonTemplate}"
+                            Command="{Binding SelectFileCommand}"/>
 
                 </StackPanel>
 
@@ -50,21 +55,96 @@
 
         <!--#region ЭЛЕМЕНТЫ НАСТРОЙКИ ФАЙЛА -->
 
-        <ScrollViewer Grid.Row="3" Grid.ColumnSpan="2" >
-            <StackPanel >
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
-                <Button Content="ПРИВЕТ" Height="50" Width="335"/>
+        <ScrollViewer Grid.Row="3" Grid.ColumnSpan="2"
+                      Foreground="White" FontSize="15">
+            
+            <StackPanel Margin="5">
+
+                <StackPanel Orientation="Horizontal" Margin="0, 10, 0, 5">
+                    <Label Content="Целевой формат: "/>
+                    <ComboBox Width="100" ItemsSource="{Binding ConvertFormat}"/>
+                </StackPanel>
+
+                <Border BorderBrush="Pink" BorderThickness="1"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0, 0, 0, 5">
+
+                    <Label Content="Качество изображения" Margin="10, 0, 5, 0"/>
+                    <fa:ImageAwesome Icon="Solid_QuestionCircle" Width="15" Height="15">
+                        <fa:ImageAwesome.ToolTip>
+                            <TextBlock TextWrapping="WrapWithOverflow" Height="100" Width="150"
+                                       Text="Выберите подходящее качество изображения. 
+                                       Чем выше качество, тем больше весит файл. 
+                                       И наоборот, чем ниже качество, тем меньше размер файла."/>
+                        </fa:ImageAwesome.ToolTip>
+                    </fa:ImageAwesome>
+                    
+                </StackPanel>
+                
+                <Slider Margin="10, 0, 10, 5"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0, 0, 0, 5">
+                    <Label Content="Значепние в %:"/>
+                    <TextBox Text="100564" Width="100" 
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"/>
+                </StackPanel>
+                
+                
+                <Border BorderBrush="Pink" BorderThickness="1"/>
+
+                
+                <Label Content="Измененить размер"/>
+                <StackPanel Orientation="Horizontal"  Margin="0, 0, 0, 5"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+
+                    <StackPanel Margin="0, 0, 20, 0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                        
+                        <Label Content="Ширина"/>
+                        <TextBox Height="25" Width="125"/>
+                        
+                    </StackPanel>
+
+
+                    <StackPanel Margin="20, 0, 0, 0"
+                                HorizontalAlignment="Center" VerticalAlignment="Center">
+                        
+                        <Label Content="Высота"/>
+                        <TextBox Height="25" Width="125" 
+                                 HorizontalContentAlignment="Center" 
+                                 VerticalContentAlignment="Center"/>
+                        
+                    </StackPanel>
+                    
+                </StackPanel>
+
+
+                <Border BorderBrush="Pink" BorderThickness="1"/>
+
+
+                <StackPanel Orientation="Horizontal" Margin="0, 5, 0, 5">
+                    <Label Content="Цветной фильтр" />
+                    <fa:ImageAwesome Icon="Solid_QuestionCircle" 
+                                     ToolTip="Применить цветовой фильтр к изображениею"
+                                     Margin="0, 0, 10, 0" Width="15" Height="15"/>
+                    <ComboBox Width="100" Margin="10, 0, 0, 0" ItemsSource="{Binding ColorFilter}"/>
+                </StackPanel>
+
+
+                <Border BorderBrush="Pink" BorderThickness="1"/>
+
+
+                <StackPanel Margin="10, 5, 0, 5">
+                    <CheckBox Content="Повысить резкость" Margin="0, 0, 0, 5" VerticalContentAlignment="Center"/>
+                    <CheckBox Content="Сглаживание" Margin="0, 5, 0, 5" VerticalContentAlignment="Center"/>
+                    <CheckBox Content="Сглаживание контраста" Margin="0, 5, 0, 0" VerticalContentAlignment="Center"/>
+                </StackPanel>
+
             </StackPanel>
+            
         </ScrollViewer>
 
         <!--#endregion-->
@@ -91,71 +171,102 @@
 
         <!--#region ОТОБРАЖЕНИЕ ИНФОРМАЦИИ О ФАЙЛЕ -->
 
-        <ScrollViewer Grid.Row="2" Grid.RowSpan="2" Grid.Column="2">
+        <ScrollViewer Grid.Column="2" Grid.Row="2" Grid.RowSpan="3">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    
-                    <GroupBox Header="Изображение" BorderBrush="Black" Margin="10" MaxHeight="500"
-                              BorderThickness="3" FontSize="30" FontFamily="Bahnschrift SemiBold SemiCondensed">
-                        
-                        <Image Margin="10" HorizontalAlignment="Center" 
-                               Source="D:\Files\Картинки\1 - Скрины\Destiny 2\20210510155652_1.jpg"/>
-                        
-                    </GroupBox>
-                    
-                </StackPanel>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <GroupBox MaxHeight="700" Header="Исходное изображение" Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="2" FontSize="20" Margin="10" FontFamily="Bahnschrift SemiBold SemiCondensed" >
+                    <Image Source="{Binding ImageSourse}" HorizontalAlignment="Center" Margin="15" />
+                </GroupBox>
 
-                    <GroupBox Header="Информация об изображении" BorderBrush="Black" Margin="10" MaxHeight="500" 
-                              BorderThickness="3" FontSize="20" FontFamily="Bahnschrift SemiBold SemiCondensed">
-
+                <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <GroupBox MaxHeight="500" Header="Информация"  BorderBrush="Black" BorderThickness="2" FontSize="20" Margin="10" FontFamily="Bahnschrift SemiBold SemiCondensed">
                         <Grid>
+
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
+
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Имя файла" Grid.Row="0" Grid.Column="0" Margin="10"
-                                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <TextBox Text="Пример имени файла" Grid.Row="0" Grid.Column="1" Margin="10"
-                                     HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Label Content="Имя файла" Grid.Row="0" Grid.Column="0" Margin="10"/>
+                            <TextBox Grid.Row="0" Grid.Column="1" Margin="10"
+                                     Text="{Binding FileNameSelected}" 
+                                     HorizontalContentAlignment="Center" 
+                                     VerticalContentAlignment="Center"/>
 
-                            <Label Content="Тип файла" Grid.Row="1" Grid.Column="0" Margin="10"
-                                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <TextBox Text="Пример типа файла" Grid.Row="1" Grid.Column="1" Margin="10"
-                                     HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Label Content="Тип файла" Grid.Row="1" Grid.Column="0" Margin="10"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Margin="10"
+                                     Text="{Binding FileTypeSelected}" 
+                                     HorizontalContentAlignment="Center" 
+                                     VerticalContentAlignment="Center"/>
 
-                            <Label Content="Размер файла" Grid.Row="2" Grid.Column="0" Margin="10"
-                                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <TextBox Text="Пример размера файла" Grid.Row="2" Grid.Column="1" Margin="10"
-                                     HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                            <Label Content="Размер файла" Grid.Row="2" Grid.Column="0" Margin="10"/>
+                            <TextBox Grid.Row="2" Grid.Column="1" Margin="10"
+                                     Text="{Binding FileSizeSelected}"
+                                     HorizontalContentAlignment="Center" 
+                                     VerticalContentAlignment="Center"/>
 
-                            <Label Content="Разрешение файл" Grid.Row="3" Grid.Column="0" Margin="10"
-                                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <TextBox Text="Пример разрешения файла" Grid.Row="3" Grid.Column="1" Margin="10" 
-                                     HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-
+                            <Label Content="Разрешение файл" Grid.Row="3" Grid.Column="0" Margin="10"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Margin="10"
+                                     Text="{Binding FileResolutionSelected}" 
+                                     HorizontalContentAlignment="Center" 
+                                     VerticalContentAlignment="Center"/>
 
                         </Grid>
-
                     </GroupBox>
-
                 </StackPanel>
 
+                <GroupBox MaxHeight="700" Header="Выходное изображение" Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="2" FontSize="20" Margin="10" FontFamily="Bahnschrift SemiBold SemiCondensed" >
+                    <!--<Image Source="/ViewModels/Res/GIF_Loading.gif" />-->
+                    <Image Source="D:\Files\Картинки\1 - Скрины\Destiny 2\20210510161556_1.jpg" HorizontalAlignment="Center" Margin="15" />
+                </GroupBox>
 
+                <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <GroupBox MaxHeight="500" Header="Информация"  BorderBrush="Black" BorderThickness="2" FontSize="20" Margin="10" FontFamily="Bahnschrift SemiBold SemiCondensed">
+                        <Grid>
 
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Label Content="Имя файла" Grid.Row="0" Grid.Column="0" Margin="10"/>
+                            <TextBox Text="image1" Grid.Row="0" Grid.Column="1" Margin="10"/>
+
+                            <Label Content="Тип файла" Grid.Row="1" Grid.Column="0" Margin="10"/>
+                            <TextBox Text=".png" Grid.Row="1" Grid.Column="1" Margin="10"/>
+
+                            <Label Content="Размер файла" Grid.Row="2" Grid.Column="0" Margin="10"/>
+                            <TextBox Text="456кб" Grid.Row="2" Grid.Column="1" Margin="10"/>
+
+                            <Label Content="Разрешение файл" Grid.Row="3" Grid.Column="0" Margin="10"/>
+                            <TextBox Text="2560 x 1440" Grid.Row="3" Grid.Column="1" Margin="10"/>
+
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
             </Grid>
         </ScrollViewer>
 
@@ -176,73 +287,27 @@
 
         <!--#region ФАЙЛЫ -->
 
-        <ComboBox Grid.Row="1" Grid.Column="4"/>
+        <StackPanel Grid.Row="1" Grid.Column="4" 
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
 
-        <ListView Grid.Row="2" Grid.RowSpan="2" Grid.Column="4">
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
-            <ListViewItem Content="Файл 12"/>
-            <ListViewItem Content="Файл 32"/>
-            <ListViewItem Content="Файл 132"/>
-            <ListViewItem Content="Файл 513"/>
+            <Label Content="{Binding NumberFiles}"/>
+
+            <ComboBox ItemsSource="{Binding SortingSelection}" Width="150"/>
+
+            <Button Content="Удалить все" Command="{Binding DeleteFilesCommand}"/>
+            
+        </StackPanel>
+
+        <ListView Grid.Row="2" Grid.RowSpan="2" Grid.Column="4"
+                  ItemsSource="{Binding FilesInfo}" SelectedItem="{Binding SelectedFileInformation}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Имя" Width="auto" DisplayMemberBinding="{Binding FileName}"/>
+                    <GridViewColumn Header="Размер" Width="auto" DisplayMemberBinding="{Binding FileSice}"/>
+                </GridView>
+            </ListView.View>
         </ListView>
 
         <!--#endregion-->

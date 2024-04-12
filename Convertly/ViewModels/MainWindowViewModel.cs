@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Convertly.ViewModels
 {
-    internal class MainWindowViewModel
+    internal class MainWindowViewModel : BaseViewModel
     {
         private readonly INavigationServices _navigationServices;
 

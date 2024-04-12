@@ -130,7 +130,7 @@
         </ScrollViewer>-->
 
 
-        <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden"/>
+        <Frame x:Name="MainFrame" Grid.Row="1"/>
         
     </Grid>
     
