@@ -1,4 +1,5 @@
 ﻿using Convertly.Model.Data;
+using Convertly.Utils;
 using Convertly.ViewModels.Commands;
 using Microsoft.Win32;
 using Microsoft.Windows.Themes;
@@ -12,6 +13,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
 namespace Convertly.ViewModels
@@ -20,18 +22,74 @@ namespace Convertly.ViewModels
     {
         public ImageConvertPageViewModel()
         {
-            
+            SetInfoImage();
+
+            SelectConvertFormat = ConvertFormat.First();
+            SelectColorFilter = ColorFilter.First();
+            SelectSortingSelection = SortingSelection.First();
         }
+
+        #region ToolTip
+
+        public string ToolTipQualituLableText { get; set; } = "Выберите подходящее качество изображения.\r\nЧем выше качество, тем больше весит файл.\r\nИ наоборот, чем ниже качество, тем меньше размер файла.";
+        public string ToolTipTargetFormatLableText { get; set; } = "Формат, в который будет конвертировано изображение";
+        public string ToolTipResizeLableText { get; set; } = "Изменениее размера изображения.\r\nСчитается в пикселях";
+        public string ToolTipColorFilterLableText { get; set; } = "Применять цветовой фильтр к изображению";
+        public string ToolTipAdditionalSettingsLableText { get; set; } = "Разнообразные доп. настройки";
+
+        #endregion
 
 
         #region Свойства для ComboBox
 
-        private List<string> _sortingSelection;
-        public List<string> SortingSelection { get; set; } = ["Выбрать все PNG", "Выбрать все JPG",];
+        public List<string> ConvertFormat { get; set; } = ["Не выбран", "PNG", "JPEG"];
+        public List<string> ColorFilter { get; set; } = ["Без фильтра", "Цветное", "Градиент серого", "Монохромное", "Инвертировать цвета", "Ретро", "Сепия"];
+        public ObservableCollection<string> SortingSelection { get; set; } = ["Все файлы", "Выбрать все PNG", "Выбрать все JPG",];
 
-        public List<string> ConvertFormat { get; set; } = ["PNG", "JPG", "ICO", "HDR/EXP", "BMP", "ESP", "SVG", "TGA", "TIFF", "WBMP", "WebP"];
+        private string _selectConvertFormat;
+        public string SelectConvertFormat 
+        {
+            get
+            {
+                return _selectConvertFormat;
+            }
 
-        public List<string> ColorFilter { get; set; } = ["Цветное", "Градиент серого", "Монохромное", "Инвертировать цвета", "Ретро", "Сепия"];
+            set
+            {
+                _selectConvertFormat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _selectColorFilter;
+        public string SelectColorFilter
+        {
+            get
+            {
+                return _selectColorFilter;
+            }
+
+            set
+            {
+                _selectColorFilter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _selectSortingSelection;
+        public string SelectSortingSelection
+        {
+            get
+            {
+                return _selectSortingSelection;
+            }
+
+            set
+            {
+                _selectSortingSelection = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 
@@ -39,6 +97,19 @@ namespace Convertly.ViewModels
         #region Свойства
 
         public ObservableCollection<FileInformation> FilesInfo { get; set; } = [];
+
+        private FileInformation _selectedFileInformation;
+        public FileInformation SelectedFileInformation
+        {
+            get => _selectedFileInformation;
+
+            set
+            {
+                _selectedFileInformation = value;
+                OnPropertyChanged();
+                SetInfoImage();
+            }
+        }
 
         private int _numberFiles;
         public int NumberFiles
@@ -55,32 +126,37 @@ namespace Convertly.ViewModels
             }
         }
 
-        #region Свйоства для TextBlock с информацией о изображении
-
-        private FileInformation _selectedFileInformation;
-        public FileInformation SelectedFileInformation
+        private string _inputImageSourse;
+        public string InputImageSourse
         {
-            get => _selectedFileInformation;
+            get => _inputImageSourse;
 
             set
             {
-                _selectedFileInformation = value;
+                _inputImageSourse = value;
                 OnPropertyChanged();
-                SetInfoImage();
             }
         }
 
-        private string _imageSourse;
-        public string ImageSourse
+        private Bitmap Render { get; set; }
+
+        private BitmapImage _outputImageSourse;
+        public BitmapImage OutputImageSourse
         {
-            get => _imageSourse;
+            get => _outputImageSourse;
 
             set
             {
-                _imageSourse = value;
+                _outputImageSourse = value;
                 OnPropertyChanged();
             }
         }
+
+
+        #endregion
+
+
+        #region Отображекние информации у файла
 
         private string _fileNameSelected;
         public string FileNameSelected
@@ -130,12 +206,6 @@ namespace Convertly.ViewModels
             }
         }
 
-
-
-        #endregion
-
-
-
         #endregion
 
 
@@ -146,9 +216,9 @@ namespace Convertly.ViewModels
         {
             get
             {
-                return _selectFileCommand ?? (_selectFileCommand = new RelayCommand(obj =>
+                return _selectFileCommand ?? (_selectFileCommand = new RelayCommand(async obj =>
                 {
-                    SelectFile();
+                    await SelectFile();
                 }));
             }
         }
@@ -165,12 +235,120 @@ namespace Convertly.ViewModels
             }
         }
 
+        private RelayCommand _previewRenderImageCommand;
+        public RelayCommand PreviewRenderImageCommand
+        {
+            get
+            {
+                return _previewRenderImageCommand ??= new RelayCommand(async obj =>
+                {
+                    if (SelectedFileInformation != null)
+                    {
+                        Bitmap bitmap = new Bitmap(SelectedFileInformation.FileUri);
+                        bitmap = await ImageProccesing.RemoveHalfPixelsAsync(bitmap);
+                        Render = bitmap;
+                        OutputImageSourse = await ImageProccesing.RenderImageAsync(bitmap);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Вы не выбрали изображение!");
+                    }
+                });
+            }
+        }
+
+        private RelayCommand _saveImageCommand;
+        public RelayCommand SaveImageCommand
+        {
+            get
+            {
+                return _saveImageCommand ??= new RelayCommand(obj =>
+                {
+                    if (SelectedFileInformation == null)
+                    {
+                        MessageBox.Show("Вы не загрузили!\nНе выбрали изображение!");
+                    }
+                    else if (OutputImageSourse == null)
+                    {
+                        MessageBox.Show("Нет измененного изображения!");
+                    }
+                    else if (SelectConvertFormat == null || SelectConvertFormat == "Не выбран")
+                    {
+                        MessageBox.Show("Вы не выбрали формат файла!");
+                    }
+                    else
+                    {
+                        switch (SelectConvertFormat)
+                        {
+                            case "PNG":
+
+                                string savePng = @$"C:\Users\texno\Downloads\{Path.GetFileNameWithoutExtension(SelectedFileInformation.FileName)}.png";
+                                ImageProccesing.SaveFileToPNG(Render, savePng);
+
+                                break;
+
+
+                            case "JPEG":
+
+                                string saveJpeg = @$"C:\Users\texno\Downloads\{Path.GetFileNameWithoutExtension(SelectedFileInformation.FileName)}.jpeg";
+                                ImageProccesing.SaveFileToJPEG(Render, saveJpeg);
+
+                                break;
+                        }
+                    }
+
+                    //if (SelectedFileInformation == null ^ OutputImageSourse == null)
+                    //{
+                    //    MessageBox.Show("Вы не выбралди файл или нет измененного изображения");
+                    //}
+                    //else if (OutputImageSourse == null ^ SelectConvertFormat == "Не выбран")
+                    //{
+                    //    MessageBox.Show("Вы не выбрали формат");
+                    //}
+                    //else
+                    //{
+                    //    switch (SelectConvertFormat)
+                    //    {
+                    //        case "PNG":
+
+                    //            string savePng = @$"C:\Users\texno\Downloads\{Path.GetFileNameWithoutExtension(SelectedFileInformation.FileName)}.png";
+                    //            ImageProccesing.SaveFileToPNG(Render, savePng);
+
+                    //            break;
+
+                    //        case "JPEG":
+
+                    //            string saveJpeg = @$"C:\Users\texno\Downloads\{Path.GetFileNameWithoutExtension(SelectedFileInformation.FileName)}.jpeg";
+                    //            ImageProccesing.SaveFileToJPEG(Render, saveJpeg);
+
+                    //            break;
+
+                    //        default:
+                    //            break;
+                    //    }
+                    //}
+                });
+            }
+        }
+
+        private RelayCommand _clearOutputImageCommand;
+        public RelayCommand ClearOutputImageCommand
+        {
+            get
+            {
+                return _clearOutputImageCommand ??= new RelayCommand(obj =>
+                {
+                    OutputImageSourse = null;
+                });
+            }
+        }
+
         #endregion
 
 
         #region Методы
 
-        private void SelectFile()
+        private async Task SelectFile()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = true;
@@ -190,7 +368,7 @@ namespace Convertly.ViewModels
                         FileCreatTime = fileInfo.CreationTime.ToString(),
                         FileSize = (fileInfo.Length / 1024).ToString("n2") + " kb",
                         FIleTimeOfChange = fileInfo.LastWriteTime.ToString(),
-                        FileResolution = GetImageResolution(file)
+                        FileResolution = await GetImageResolution(file)
                     });
 
                     NumberFiles = FilesInfo.Count;
@@ -201,7 +379,11 @@ namespace Convertly.ViewModels
 
         private void DeleteFiles()
         {
-            if (MessageBox.Show("Вы точно хотите удалить все файлы?", "Точно?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (FilesInfo.Count == 0)
+            {
+                MessageBox.Show("Нечего удалять");
+            }
+            else if (MessageBox.Show("Вы точно хотите удалить все файлы?", "Точно?", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 FilesInfo.Clear();
             }
@@ -209,30 +391,33 @@ namespace Convertly.ViewModels
         }
 
 
-        private string GetImageResolution(string Url)
+        private Task<string> GetImageResolution(string Url)
         {
-            try
+            return Task.Run(() =>
             {
-                using (var image = Image.FromFile(Url))
+                try
                 {
-                    string width = image.Width.ToString();
-                    string height = image.Height.ToString();
+                    using (var image = Image.FromFile(Url))
+                    {
+                        string width = image.Width.ToString();
+                        string height = image.Height.ToString();
 
-                    return width + "x" + height;
+                        return width + "x" + height;
+                    }
                 }
-            }
-            catch (Exception)
-            {
+                catch (Exception)
+                {
 
-                return string.Empty;
-            }
+                    return string.Empty;
+                }
+            });
         }
 
-        public void SetInfoImage()
+        private void SetInfoImage()
         {
             if (_selectedFileInformation == null)
             {
-                ImageSourse = null;
+                InputImageSourse = null;
                 FileNameSelected = "Нету данных";
                 FileTypeSelected = "Нету данных";
                 FileSizeSelected = "Нету данных";
@@ -240,7 +425,7 @@ namespace Convertly.ViewModels
             }
             else
             {
-                ImageSourse = _selectedFileInformation.FileUri;
+                InputImageSourse = _selectedFileInformation.FileUri;
                 FileNameSelected = Path.GetFileNameWithoutExtension(_selectedFileInformation.FileName);
                 FileTypeSelected = _selectedFileInformation.FileType;
                 FileSizeSelected = _selectedFileInformation.FileSize;

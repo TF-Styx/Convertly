@@ -36,47 +36,47 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Label Content="Изображений" Grid.Row="0" Grid.Column="0" Style="{StaticResource Lable}"/>
+                    <Label Content="Изображений" Grid.Row="0" Grid.Column="0" Style="{StaticResource LableStyle}"/>
                     <Button Grid.Column="0" Grid.Row="1"
                             HorizontalAlignment="Center" 
                             Command="{Binding NavigateToImageConvertPageCommand}"
                             Template="{StaticResource MenuButtonTemplate}"
                             ToolTip="Конвертор изображений">
-                        
-                        <fa:ImageAwesome Icon="Regular_FileImage" Foreground="Black" Height="40"/>
+
+                        <fa:ImageAwesome Icon="Regular_FileImage" Foreground="White" Height="40"/>
                         
                     </Button>
 
-                    <Label Content="Документов" Grid.Row="0" Grid.Column="1" Style="{StaticResource Lable}"/>
+                    <Label Content="Документов" Grid.Row="0" Grid.Column="1" Style="{StaticResource LableStyle}"/>
                     <Button Grid.Column="1" Grid.Row="1" 
                             HorizontalAlignment="Center"  
                             Command="{Binding NavigateToImageConvertPageCommand}" 
                             Template="{StaticResource MenuButtonTemplate}" 
                             ToolTip="Конвертор документов">
 
-                        <fa:ImageAwesome Icon="Regular_FileWord" Foreground="Black" Height="40"/>
+                        <fa:ImageAwesome Icon="Regular_FileWord" Foreground="White" Height="40"/>
 
                     </Button>
 
-                    <Label Content="Видео" Grid.Row="0" Grid.Column="2" Style="{StaticResource Lable}"/>
+                    <Label Content="Видео" Grid.Row="0" Grid.Column="2" Style="{StaticResource LableStyle}"/>
                     <Button Grid.Column="2" Grid.Row="1" 
                             HorizontalAlignment="Center"
                             Command="{Binding NavigateToImageConvertPageCommand}" 
                             Template="{StaticResource MenuButtonTemplate}" 
                             ToolTip="Конвертор видео">
 
-                        <fa:ImageAwesome Icon="Regular_FileVideo" Foreground="Black" Height="40"/>
+                        <fa:ImageAwesome Icon="Regular_FileVideo" Foreground="White" Height="40"/>
 
                     </Button>
 
-                    <Label Content="Аудио" Grid.Row="0" Grid.Column="3" Style="{StaticResource Lable}"/>
+                    <Label Content="Аудио" Grid.Row="0" Grid.Column="3" Style="{StaticResource LableStyle}"/>
                     <Button Grid.Column="3" Grid.Row="1" 
                             HorizontalAlignment="Center" 
                             Command="{Binding NavigateToImageConvertPageCommand}" 
                             Template="{StaticResource MenuButtonTemplate}" 
                             ToolTip="Конвертор аудио">
 
-                        <fa:ImageAwesome Icon="Regular_FileAudio" Foreground="Black" Height="40"/>
+                        <fa:ImageAwesome Icon="Regular_FileAudio" Foreground="White" Height="40"/>
 
                     </Button>
 
