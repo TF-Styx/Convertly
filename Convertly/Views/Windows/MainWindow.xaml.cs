@@ -20,7 +20,7 @@ namespace Convertly
     {
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent(); 
 
             DataContext = new MainWindowViewModel(new NavigationServices(MainFrame));
         }

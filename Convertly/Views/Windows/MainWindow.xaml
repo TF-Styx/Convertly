@@ -9,9 +9,10 @@
         Title="MainWindow" 
         Height="700" Width="1300"
         MinHeight="365" MinWidth="650"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Background="#FF282C34">
     
-    <Grid>
+    <Grid> 
         
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -20,7 +21,7 @@
 
         <TabControl Grid.Column="0" Style="{StaticResource TabControleMainStyle}">
             
-            <TabItem Header="Конвертер" FontSize="15">
+            <TabItem Header="Конвертер" FontSize="15"> 
                 
                 <Grid>
                     

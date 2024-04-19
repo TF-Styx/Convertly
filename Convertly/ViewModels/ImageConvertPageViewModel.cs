@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -24,9 +25,7 @@ namespace Convertly.ViewModels
         {
             SetInfoImage();
 
-            SelectConvertFormat = ConvertFormat.First();
-            SelectColorFilter = ColorFilter.First();
-            SelectSortingSelection = SortingSelection.First();
+            DefoultComboBOxValue();
         }
 
         #region ToolTip
@@ -108,6 +107,7 @@ namespace Convertly.ViewModels
                 _selectedFileInformation = value;
                 OnPropertyChanged();
                 SetInfoImage();
+                SetHeightAndWidthValue();
             }
         }
 
@@ -152,6 +152,59 @@ namespace Convertly.ViewModels
             }
         }
 
+        private int _sliderValue;
+        public int SliderValue
+        {
+            get
+            {
+                return _sliderValue;
+            }
+
+            set
+            {
+                if (value < 0 || value > 100)
+                {
+                    MessageBox.Show("Значение не должно быть меньше '0' или больше '100'");
+                    SliderValue = 0;
+                }
+                else
+                {
+                    _sliderValue = value;
+                }
+
+                OnPropertyChanged();
+            }
+        }
+
+        private int _widthValue;
+        public int WidthValue
+        {
+            get
+            {
+                return _widthValue;
+            }
+
+            set
+            {
+                _widthValue = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _heightValue;
+        public int HeightValue
+        {
+            get
+            {
+                return _heightValue;
+            }
+
+            set
+            {
+                _heightValue = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 
@@ -242,17 +295,7 @@ namespace Convertly.ViewModels
             {
                 return _previewRenderImageCommand ??= new RelayCommand(async obj =>
                 {
-                    if (SelectedFileInformation != null)
-                    {
-                        Bitmap bitmap = new Bitmap(SelectedFileInformation.FileUri);
-                        bitmap = await ImageProccesing.RemoveHalfPixelsAsync(bitmap);
-                        Render = bitmap;
-                        OutputImageSourse = await ImageProccesing.RenderImageAsync(bitmap);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Вы не выбрали изображение!");
-                    }
+                    await PreviewRenderImageAsinc();
                 });
             }
         }
@@ -264,69 +307,7 @@ namespace Convertly.ViewModels
             {
                 return _saveImageCommand ??= new RelayCommand(obj =>
                 {
-                    if (SelectedFileInformation == null)
-                    {
-                        MessageBox.Show("Вы не загрузили!\nНе выбрали изображение!");
-                    }
-                    else if (OutputImageSourse == null)
-                    {
-                        MessageBox.Show("Нет измененного изображения!");
-                    }
-                    else if (SelectConvertFormat == null || SelectConvertFormat == "Не выбран")
-                    {
-                        MessageBox.Show("Вы не выбрали формат файла!");
-                    }
-                    else
-                    {
-                        switch (SelectConvertFormat)
-                        {
-                            case "PNG":
-
-                                string savePng = @$"C:\Users\texno\Downloads\{Path.GetFileNameWithoutExtension(SelectedFileInformation.FileName)}.png";
-                                ImageProccesing.SaveFileToPNG(Render, savePng);
-
-                                break;
-
-
-                            case "JPEG":
-
-                                string saveJpeg = @$"C:\Users\texno\Downloads\{Path.GetFileNameWithoutExtension(SelectedFileInformation.FileName)}.jpeg";
-                                ImageProccesing.SaveFileToJPEG(Render, saveJpeg);
-
-                                break;
-                        }
-                    }
-
-                    //if (SelectedFileInformation == null ^ OutputImageSourse == null)
-                    //{
-                    //    MessageBox.Show("Вы не выбралди файл или нет измененного изображения");
-                    //}
-                    //else if (OutputImageSourse == null ^ SelectConvertFormat == "Не выбран")
-                    //{
-                    //    MessageBox.Show("Вы не выбрали формат");
-                    //}
-                    //else
-                    //{
-                    //    switch (SelectConvertFormat)
-                    //    {
-                    //        case "PNG":
-
-                    //            string savePng = @$"C:\Users\texno\Downloads\{Path.GetFileNameWithoutExtension(SelectedFileInformation.FileName)}.png";
-                    //            ImageProccesing.SaveFileToPNG(Render, savePng);
-
-                    //            break;
-
-                    //        case "JPEG":
-
-                    //            string saveJpeg = @$"C:\Users\texno\Downloads\{Path.GetFileNameWithoutExtension(SelectedFileInformation.FileName)}.jpeg";
-                    //            ImageProccesing.SaveFileToJPEG(Render, saveJpeg);
-
-                    //            break;
-
-                    //        default:
-                    //            break;
-                    //    }
-                    //}
+                    SaveImage();
                 });
             }
         }
@@ -348,6 +329,13 @@ namespace Convertly.ViewModels
 
         #region Методы
 
+        private void DefoultComboBOxValue()
+        {
+            SelectConvertFormat = ConvertFormat.First();
+            SelectColorFilter = ColorFilter.First();
+            SelectSortingSelection = SortingSelection.First();
+        }
+
         private async Task SelectFile()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -368,14 +356,13 @@ namespace Convertly.ViewModels
                         FileCreatTime = fileInfo.CreationTime.ToString(),
                         FileSize = (fileInfo.Length / 1024).ToString("n2") + " kb",
                         FIleTimeOfChange = fileInfo.LastWriteTime.ToString(),
-                        FileResolution = await GetImageResolution(file)
+                        FileResolution = await ImageProccesing.GetImageResolution(file)
                     });
 
                     NumberFiles = FilesInfo.Count;
                 }
             }
         }
-
 
         private void DeleteFiles()
         {
@@ -390,38 +377,15 @@ namespace Convertly.ViewModels
             else return;
         }
 
-
-        private Task<string> GetImageResolution(string Url)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    using (var image = Image.FromFile(Url))
-                    {
-                        string width = image.Width.ToString();
-                        string height = image.Height.ToString();
-
-                        return width + "x" + height;
-                    }
-                }
-                catch (Exception)
-                {
-
-                    return string.Empty;
-                }
-            });
-        }
-
         private void SetInfoImage()
         {
             if (_selectedFileInformation == null)
             {
                 InputImageSourse = null;
-                FileNameSelected = "Нету данных";
-                FileTypeSelected = "Нету данных";
-                FileSizeSelected = "Нету данных";
-                FileResolutionSelected = "Нету данных";
+                FileNameSelected = "Нет данных";
+                FileTypeSelected = "Нет данных";
+                FileSizeSelected = "Нет данных";
+                FileResolutionSelected = "Нет данных";
             }
             else
             {
@@ -431,6 +395,70 @@ namespace Convertly.ViewModels
                 FileSizeSelected = _selectedFileInformation.FileSize;
                 FileResolutionSelected = _selectedFileInformation.FileResolution;
             }
+        }
+
+        private async Task PreviewRenderImageAsinc()
+        {
+            if (SelectedFileInformation != null)
+            {
+                Bitmap bitmap = new Bitmap(SelectedFileInformation.FileUri);
+                bitmap = await ImageProccesing.ChangingSiceImage(bitmap, WidthValue, HeightValue);
+                //bitmap = await ImageProccesing.RemoveHalfPixelsAsync(bitmap);
+                
+                WidthValue = bitmap.Width;
+                HeightValue = bitmap.Height;
+
+                Render = bitmap;
+                OutputImageSourse = await ImageProccesing.BitmapToBitmapImageAsync(bitmap);
+            }
+            else
+            {
+                MessageBox.Show("Вы не выбрали изображение!");
+            }
+        }
+
+        private void SaveImage()
+        {
+            if (SelectedFileInformation == null)
+            {
+                MessageBox.Show("Вы не загрузили!\nНе выбрали изображение!");
+            }
+            else if (OutputImageSourse == null)
+            {
+                MessageBox.Show("Нет измененного изображения!");
+            }
+            else if (SelectConvertFormat == null || SelectConvertFormat == "Не выбран")
+            {
+                MessageBox.Show("Вы не выбрали формат файла!");
+            }
+            else
+            {
+                switch (SelectConvertFormat)
+                {
+                    case "PNG":
+
+                        string savePng = @$"C:\Users\texno\Downloads\{Path.GetFileNameWithoutExtension(SelectedFileInformation.FileName)}.png";
+                        ImageProccesing.SaveFileToPNG(Render, savePng);
+
+                        break;
+
+
+                    case "JPEG":
+
+                        string saveJpeg = @$"C:\Users\texno\Downloads\{Path.GetFileNameWithoutExtension(SelectedFileInformation.FileName)}.jpeg";
+                        ImageProccesing.SaveFileToJPEG(Render, saveJpeg);
+
+                        break;
+                }
+            }
+        }
+
+        private void SetHeightAndWidthValue()
+        {
+            var result = ImageProccesing.GetImageWidthAndHeight(SelectedFileInformation.FileUri);
+
+            WidthValue = result.width;
+            HeightValue = result.height;
         }
 
         #endregion

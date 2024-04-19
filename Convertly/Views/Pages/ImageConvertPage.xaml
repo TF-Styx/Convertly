@@ -80,11 +80,11 @@
 
                 </StackPanel>
                 
-                <Slider Margin="10, 0, 10, 5"/>
+                <Slider Margin="10, 0, 10, 5" Maximum="100" Value="{Binding SliderValue}"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0, 0, 0, 5">
                     <Label Content="Значепние в %:" Style="{StaticResource LableStyle}"/>
-                    <TextBox Text="" Width="100" 
+                    <TextBox Text="{Binding SliderValue, UpdateSourceTrigger=PropertyChanged}" Width="100" 
                              HorizontalContentAlignment="Center"
                              VerticalContentAlignment="Center"/>
                 </StackPanel>
@@ -110,6 +110,7 @@
 
                         <Label Content="Ширина" Style="{StaticResource LableStyle}"/>
                         <TextBox Height="25" Width="125"
+                                 Text="{Binding WidthValue}"
                                  Style="{StaticResource SettingTextBoxStyle}"
                                  Template="{StaticResource SettingTextBoxControleTemplate}"/>
                         
@@ -121,6 +122,7 @@
 
                         <Label Content="Высота" Style="{StaticResource LableStyle}"/>
                         <TextBox Height="25" Width="125" 
+                                 Text="{Binding HeightValue}"
                                  Style="{StaticResource SettingTextBoxStyle}"
                                  Template="{StaticResource SettingTextBoxControleTemplate}"/>
                         
@@ -207,7 +209,7 @@
                     <Image Source="{Binding InputImageSourse}" HorizontalAlignment="Center" Margin="15" />
                 </GroupBox>
 
-                <StackPanel Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <StackPanel Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <GroupBox MaxHeight="500" Header="Информация"  BorderBrush="Black" BorderThickness="2" FontSize="20" Margin="10" FontFamily="Bahnschrift SemiBold SemiCondensed">
                         <Grid>
 
@@ -256,37 +258,6 @@
                     <Image Source="{Binding OutputImageSourse}" HorizontalAlignment="Center" Margin="15" />
                 </GroupBox>
 
-                <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
-                    <GroupBox MaxHeight="500" Header="Информация"  BorderBrush="Black" BorderThickness="2" FontSize="20" Margin="10" FontFamily="Bahnschrift SemiBold SemiCondensed">
-                        <Grid>
-
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Label Content="Имя файла" Grid.Row="0" Grid.Column="0" Margin="10" Foreground="White"/>
-                            <TextBox Text="image1" Grid.Row="0" Grid.Column="1" Margin="10"/>
-
-                            <Label Content="Тип файла" Grid.Row="1" Grid.Column="0" Margin="10" Foreground="White"/>
-                            <TextBox Text=".png" Grid.Row="1" Grid.Column="1" Margin="10"/>
-
-                            <Label Content="Размер файла" Grid.Row="2" Grid.Column="0" Margin="10" Foreground="White"/>
-                            <TextBox Text="456кб" Grid.Row="2" Grid.Column="1" Margin="10"/>
-
-                            <Label Content="Разрешение файл" Grid.Row="3" Grid.Column="0" Margin="10" Foreground="White"/>
-                            <TextBox Text="2560 x 1440" Grid.Row="3" Grid.Column="1" Margin="10"/>
-
-                        </Grid>
-                    </GroupBox>
-                </StackPanel>
             </Grid>
         </ScrollViewer>
 
@@ -328,6 +299,7 @@
 
         <ListView Grid.Row="2" Grid.RowSpan="2" Grid.Column="4"
                   ItemsSource="{Binding FilesInfo}" 
+                  Background="#FF282C34" Foreground="White"
                   SelectedItem="{Binding SelectedFileInformation}">
             <ListView.View>
                 <GridView>

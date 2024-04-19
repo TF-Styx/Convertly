@@ -62,7 +62,7 @@ namespace Convertly.Utils
             return result;
         }
 
-        public static async Task<BitmapImage> RenderImageAsync(Bitmap image)
+        public static async Task<BitmapImage> BitmapToBitmapImageAsync(Bitmap image)
         {
             return await Task.Run(() =>
             {
@@ -97,6 +97,99 @@ namespace Convertly.Utils
 
                 return bitmap;
             }
+        }
+
+        public static Task<string> GetImageResolution(string Url)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    using (var image = Image.FromFile(Url))
+                    {
+                        string width = image.Width.ToString();
+                        string height = image.Height.ToString();
+
+                        return width + "x" + height;
+                    }
+                }
+                catch (Exception)
+                {
+                    return string.Empty;
+                }
+            });
+        }
+
+        public static (int width, int height)GetImageWidthAndHeight(string Url)
+        {
+            try
+            {
+                using (Image image = Image.FromFile(Url))
+                {
+                    int width = image.Width;
+                    int height = image.Height;
+
+                    return (width, height);
+                }
+            }
+            catch (Exception)
+            {
+                return (0, 0);
+            }
+        }
+
+        public static Task<(int width, int height)>GetImageWidthAndHeightAsync(string Url)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    using (Image image = Image.FromFile(Url))
+                    {
+                        int width = image.Width;
+                        int height = image.Height;
+
+                        return (width, height);
+                    }
+                }
+                catch (Exception)
+                {
+                    return (0, 0);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Изменение изображения, без его обрезания
+        /// </summary>
+        /// <returns>Изображение в Bitmap</returns>
+        public static Task<Bitmap> ChangingSiceImage(Bitmap image, int width, int height)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    Bitmap newImage = new Bitmap(width, height);
+
+                    using (Graphics graphics = Graphics.FromImage(newImage))
+                    {
+                        graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                        graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bicubic;
+                        graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                        graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                        graphics.DrawImage(image, 0, 0, width, height);
+                    }
+                    return newImage;
+                }
+                catch (Exception)
+                {
+                    if (width > 10000 || height > 10000)
+                    {
+                        MessageBox.Show("Вы установили не допустимый размер изображения!\nИзображение будет отрисовано с исходными параметрами!");
+                    }
+                    return (image);
+                }
+            });
         }
 
         #endregion
