@@ -51,7 +51,7 @@
                     <Label Content="Документов" Grid.Row="0" Grid.Column="1" Style="{StaticResource LableStyle}"/>
                     <Button Grid.Column="1" Grid.Row="1" 
                             HorizontalAlignment="Center"  
-                            Command="{Binding NavigateToImageConvertPageCommand}" 
+                            Command="{Binding NavigateToDocumentConverterPageCommand}" 
                             Template="{StaticResource MenuButtonTemplate}" 
                             ToolTip="Конвертор документов">
 
@@ -85,8 +85,31 @@
                 
             </TabItem>
 
-            <TabItem Header="Создание GIF">
-                
+            <TabItem Header="PDF">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Конвертация" Grid.Row="0" Grid.Column="0" Style="{StaticResource LableStyle}"/>
+                    <Button Grid.Column="0" Grid.Row="1" 
+                            HorizontalAlignment="Center"
+                            Command="{Binding NavigateToPDFPage}"
+                            Template="{StaticResource MenuButtonTemplate}"
+                            ToolTip="Конвертация">
+
+                        <fa:ImageAwesome Icon="Regular_FilePdf" Foreground="White" Height="40"/>
+
+                    </Button>
+                </Grid>
             </TabItem>
             
         </TabControl>
@@ -131,7 +154,7 @@
         </ScrollViewer>-->
 
 
-        <Frame x:Name="MainFrame" Grid.Row="1"/>
+        <Frame x:Name="MainFrame" Grid.Row="1" NavigationUIVisibility="Hidden"/>
         
     </Grid>
     

@@ -41,6 +41,30 @@ namespace Convertly.ViewModels
             }
         }
 
+        private RelayCommand _navigateToDocumentConverterPageCommand;
+        public RelayCommand NavigateToDocumentConverterPageCommand
+        {
+            get
+            {
+                return _navigateToDocumentConverterPageCommand ?? (_navigateToDocumentConverterPageCommand = new RelayCommand(obj =>
+                {
+                    NavigatToDocumentConverterPage();
+                }));
+            }
+        }
+
+        private RelayCommand _navigateToPDFPage;
+        public RelayCommand NavigateToPDFPage
+        {
+            get
+            {
+                return _navigateToPDFPage ?? (_navigateToPDFPage = new RelayCommand(obj =>
+                {
+                    NavigatToPDFPage();
+                }));
+            }
+        }
+
         private void NavigatToGIFPage()
         {
             _navigationServices.NavigateTo("GIFPage", null);
@@ -49,6 +73,16 @@ namespace Convertly.ViewModels
         private void NavigatToImageConvertPage()
         {
             _navigationServices.NavigateTo("ImageConvertPage", null);
+        }
+
+        private void NavigatToDocumentConverterPage()
+        {
+            _navigationServices.NavigateTo("DocumentConverterPage", null);
+        }
+
+        private void NavigatToPDFPage()
+        {
+            _navigationServices.NavigateTo("PDFPage", null);
         }
     }
 }

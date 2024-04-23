@@ -178,7 +178,8 @@
 
             <Button Content="Предпросмотр" Command="{Binding PreviewRenderImageCommand}"
                     Margin="0, 0, 10, 0" Template="{StaticResource ControlButton}"/>
-            <Button Content="Конверт. и сохр." Margin="0, 0, 10, 0" Template="{StaticResource ControlButton}"/>
+            <Button Content="Конверт. и сохр." Command="{Binding ConvertAndSaveAllImageCommand}"
+                    Margin="0, 0, 10, 0" Template="{StaticResource ControlButton}"/>
             <Button Content="Сохранить" Command="{Binding SaveImageCommand}"
                     Margin="0, 0, 10, 0" Template="{StaticResource ControlButton}"/>
             <Button Content="Сбросить" 
@@ -210,10 +211,12 @@
                 </GroupBox>
 
                 <StackPanel Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    
                     <GroupBox MaxHeight="500" Header="Информация"  BorderBrush="Black" BorderThickness="2" FontSize="20" Margin="10" FontFamily="Bahnschrift SemiBold SemiCondensed">
-                        <Grid>
+                        <!--<Grid>
 
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
@@ -225,32 +228,68 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Content="Имя файла" Grid.Row="0" Grid.Column="0" Margin="10" Foreground="White"/>
-                            <TextBox Grid.Row="0" Grid.Column="1" Margin="10"
-                                     Text="{Binding FileNameSelected}" 
-                                     Style="{StaticResource SettingTextBoxStyle}"
-                                     Template="{StaticResource SettingTextBoxControleTemplate}"/>
+                            <Label Content="Ссылка на файл" Grid.Row="0" Grid.Column="0" 
+                                   Margin="10" Style="{StaticResource LableStyle}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Margin="10" 
+                                   Style="{StaticResource LableStyle}" 
+                                   Content="{Binding InputImageSourse}" />  
 
-                            <Label Content="Тип файла" Grid.Row="1" Grid.Column="0" Margin="10" Foreground="White"/>
-                            <TextBox Grid.Row="1" Grid.Column="1" Margin="10"
-                                     Text="{Binding FileTypeSelected}" 
-                                     Style="{StaticResource SettingTextBoxStyle}"
-                                     Template="{StaticResource SettingTextBoxControleTemplate}"/>
+                            <Label Content="Имя файла" Grid.Row="1" Grid.Column="0" 
+                                   Margin="10" Style="{StaticResource LableStyle}"/>
+                            <Label Grid.Row="1" Grid.Column="1" Margin="10" 
+                                   Style="{StaticResource LableStyle}" 
+                                   Content="{Binding FileNameSelected}" />
 
-                            <Label Content="Размер файла" Grid.Row="2" Grid.Column="0" Margin="10" Foreground="White"/>
-                            <TextBox Grid.Row="2" Grid.Column="1" Margin="10"
-                                     Text="{Binding FileSizeSelected}"
-                                     Style="{StaticResource SettingTextBoxStyle}"
-                                     Template="{StaticResource SettingTextBoxControleTemplate}"/>
+                            <Label Content="Тип файла" Grid.Row="2" Grid.Column="0" 
+                                   Margin="10" Style="{StaticResource LableStyle}"/>
+                            <Label Grid.Row="2" Grid.Column="1" Margin="10" 
+                                   Style="{StaticResource LableStyle}" 
+                                   Content="{Binding FileTypeSelected}" />
 
-                            <Label Content="Разрешение файл" Grid.Row="3" Grid.Column="0" Margin="10" Foreground="White"/>
-                            <TextBox Grid.Row="3" Grid.Column="1" Margin="10"
-                                     Text="{Binding FileResolutionSelected}" 
-                                     Style="{StaticResource SettingTextBoxStyle}"
-                                     Template="{StaticResource SettingTextBoxControleTemplate}"/>
+                            <Label Content="Размер файла" Grid.Row="3" Grid.Column="0" 
+                                   Margin="10" Style="{StaticResource LableStyle}"/>
+                            <Label Grid.Row="3" Grid.Column="1" Margin="10" 
+                                   Style="{StaticResource LableStyle}" 
+                                   Content="{Binding FileSizeSelected}"/>
 
-                        </Grid>
+                            <Label Content="Разрешение файл" Grid.Row="4" Grid.Column="0" 
+                                   Margin="10" Style="{StaticResource LableStyle}"/>
+                            <Label Grid.Row="4" Grid.Column="1" Margin="10" 
+                                   Style="{StaticResource LableStyle}" 
+                                   Content="{Binding FileResolutionSelected}"/>
+
+                        </Grid>-->
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <StackPanel>
+                                
+                                <Label Content="Ссылка на файл" Margin="10" Style="{StaticResource LableStyle}"/>
+                                <Label Content="Имя файла" Margin="10" Style="{StaticResource LableStyle}"/>
+                                <Label Content="Тип файла" Margin="10" Style="{StaticResource LableStyle}"/>
+                                <Label Content="Размер файла" Margin="10" Style="{StaticResource LableStyle}"/>
+                                <Label Content="Разрешение файл" Margin="10" Style="{StaticResource LableStyle}"/>
+                                <Label Content="Время создания файла" Margin="10" Style="{StaticResource LableStyle}"/>
+                                <Label Content="Время изменения файла" Margin="10" Style="{StaticResource LableStyle}"/>
+
+                            </StackPanel>
+
+                            <StackPanel>
+                                
+                                <Label Margin="10" Style="{StaticResource LableStyle}" Content="{Binding InputImageSourse}"/>
+                                <Label Margin="10" Style="{StaticResource LableStyle}" Content="{Binding FileNameSelected}"/>
+                                <Label Margin="10" Style="{StaticResource LableStyle}" Content="{Binding FileTypeSelected}"/>
+                                <Label Margin="10" Style="{StaticResource LableStyle}" Content="{Binding FileSizeSelected}"/>
+                                <Label Margin="10" Style="{StaticResource LableStyle}" Content="{Binding FileResolutionSelected}"/>
+                                <Label Margin="10" Style="{StaticResource LableStyle}" Content="{Binding FileCreatedTimeSelected}"/>
+                                <Label Margin="10" Style="{StaticResource LableStyle}" Content="{Binding FileTimeOfChangeSelected}"/>
+
+                            </StackPanel>
+                            
+                        </StackPanel>
+                        
                     </GroupBox>
+                    
                 </StackPanel>
 
                 <GroupBox MaxHeight="700" Header="Выходное изображение" Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="2" FontSize="20" Margin="10" FontFamily="Bahnschrift SemiBold SemiCondensed" >

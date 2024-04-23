@@ -29,6 +29,14 @@ namespace Convertly.ViewModels.Serviсes.NavigationPage
                     _frame.Navigate(new ImageConvertPage());
                     break;
 
+                case "DocumentConverterPage":
+                    _frame.Navigate(new DocumentConverterPage());
+                    break;
+
+                case "PDFPage":
+                    _frame.Navigate(new PDFPage());
+                    break;
+
                 default:
                     throw new ArgumentException("Страница не найдена");
             }

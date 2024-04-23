@@ -16,16 +16,31 @@ namespace Convertly.Utils
     {
         #region Методы для конвертации
 
+        /// <summary>
+        /// Сохранение изображения в PNG
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="PathFile"></param>
         public static void SaveFileToPNG(Bitmap image, string PathFile)
         {
             image.Save(PathFile, ImageFormat.Png);
         }
 
+        /// <summary>
+        /// Сохранение изображения в JPEG
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="PathFile"></param>
         public static void SaveFileToJPEG(Bitmap image, string PathFile)
         {
             image.Save(PathFile, ImageFormat.Jpeg);
         }
 
+        /// <summary>
+        /// Удалине половины пикселей изображения (Асинхронный медот)
+        /// </summary>
+        /// <param name="image"></param>
+        /// <returns></returns>
         public static async Task<Bitmap> RemoveHalfPixelsAsync(Bitmap image)
         {
             Bitmap result = new Bitmap(image.Width / 2, image.Height / 2);
@@ -62,6 +77,11 @@ namespace Convertly.Utils
             return result;
         }
 
+        /// <summary>
+        /// Конвертация Bitmap в BitmapImage
+        /// </summary>
+        /// <param name="image"></param>
+        /// <returns></returns>
         public static async Task<BitmapImage> BitmapToBitmapImageAsync(Bitmap image)
         {
             return await Task.Run(() =>
@@ -83,6 +103,11 @@ namespace Convertly.Utils
             });
         }
 
+        /// <summary>
+        /// Сохранение предпоказа изображения в оперативной памяти
+        /// </summary>
+        /// <param name="bitmapImage"></param>
+        /// <returns></returns>
         public static Bitmap SaveRender(BitmapImage bitmapImage)
         {
             using (MemoryStream memory = new MemoryStream())
@@ -99,6 +124,11 @@ namespace Convertly.Utils
             }
         }
 
+        /// <summary>
+        /// Получение ширины и высоты изображения вместе (Асинхронный медот)
+        /// </summary>
+        /// <param name="Url"></param>
+        /// <returns></returns>
         public static Task<string> GetImageResolution(string Url)
         {
             return Task.Run(() =>
@@ -120,6 +150,11 @@ namespace Convertly.Utils
             });
         }
 
+        /// <summary>
+        /// Получение ширины и высоты изображения по отдельности
+        /// </summary>
+        /// <param name="Url"></param>
+        /// <returns></returns>
         public static (int width, int height)GetImageWidthAndHeight(string Url)
         {
             try
@@ -138,6 +173,11 @@ namespace Convertly.Utils
             }
         }
 
+        /// <summary>
+        /// Получение ширины и высоты изображения по отдельности (Асинхронная версия)
+        /// </summary>
+        /// <param name="Url"></param>
+        /// <returns></returns>
         public static Task<(int width, int height)>GetImageWidthAndHeightAsync(string Url)
         {
             return Task.Run(() =>
